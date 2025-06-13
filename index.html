@@ -1,96 +1,156 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portfolio – ANDEMI M. Rayhane</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portfolio – ANDEMI M. Rayhane</title>
   <style>
     /* === Variables Couleurs === */
     :root {
       --noir: #0d0d0d;
       --bleu: #00bfff;
       --blanc: #ffffff;
+      --gris: #cccccc;
+      --fond-light: #f4f4f4;
+      --text-light: #333333;
     }
 
-    /* === Reset simple & Typo === */
+    .dark-mode {
+      --noir: #0d0d0d;
+      --bleu: #00bfff;
+      --blanc: #ffffff;
+      --gris: #aaaaaa;
+      background-color: var(--noir);
+      color: var(--blanc);
+    }
+
+    .light-mode {
+      --noir: #ffffff;
+      --bleu: #007acc;
+      --blanc: #000000;
+      --gris: #555555;
+      background-color: var(--fond-light);
+      color: var(--text-light);
+    }
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: "Times New Roman", Times, serif;
+      font-family: 'Courier New', Courier, monospace;
+      transition: all 0.4s ease;
     }
 
     body {
-      background-color: var(--noir);
-      color: var(--blanc);
-      line-height: 1.6;
-      overflow-x: hidden;
-      position: relative;
       min-height: 100vh;
+      position: relative;
+      color: var(--blanc);
+      background-color: var(--noir);
+      overflow-x: hidden;
     }
 
-    /* === Fond animé (lignes électroniques) === */
+    /* Fond animé */
     #bgCanvas {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       z-index: 0;
       pointer-events: none;
     }
 
-    /* === Zones de contenu === */
-    header, section, footer {
-      position: relative;
-      z-index: 10; /* au‑dessus du canvas */
+    /* Navbar fixe */
+    #navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(13, 13, 13, 0.95);
+      padding: 0.8rem 2rem;
+      z-index: 100;
+      border-bottom: 2px solid var(--bleu);
+    }
+    .nav-container {
       max-width: 900px;
       margin: auto;
-      padding: 2rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    #navbar a {
+      color: var(--blanc);
+      text-decoration: none;
+      margin: 0 0.7rem;
+      font-size: 1rem;
+      transition: color 0.3s;
+    }
+    #navbar a:hover { color: var(--bleu); }
+    .btn-cv {
+      font-size: 0.95rem;
+      padding: 0.4rem 0.8rem;
+      background: transparent;
+      border: 1px solid var(--bleu);
+      color: var(--bleu);
+      border-radius: 5px;
+      transition: all 0.3s;
+    }
+    .btn-cv:hover {
+      background: var(--bleu);
+      color: var(--noir);
+    }
+    #themeToggle {
+      background: none;
+      border: none;
+      color: var(--blanc);
+      font-size: 1.2rem;
+      cursor: pointer;
     }
 
-    header {
-      text-align: center;
-      border-bottom: 2px solid var(--bleu);
-      background: linear-gradient(to right, #000000, #1c1c1c);
+    /* Header amélioré */
+    .header-content {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      max-width: 900px;
+      margin: auto;
+      padding-top: 5rem;
     }
-
-    header h1 {
+    .photo-profil {
+      width: 160px;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 2px solid var(--bleu);
+    }
+    .header-text h1 {
       color: var(--bleu);
       font-size: 2.8rem;
       margin-bottom: 0.3rem;
-      font-weight: normal;
     }
-
-    header p {
+    .header-text p {
       font-size: 1.25rem;
+      color: var(--gris);
     }
 
-    nav {
-      margin-top: 1rem;
+    /* Sections */
+    section {
+      max-width: 900px;
+      margin: auto;
+      padding: 3rem 1rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 1s ease;
     }
-
-    nav a {
-      margin: 0 1rem;
-      color: var(--blanc);
-      text-decoration: none;
-      border-bottom: 2px solid transparent;
-      transition: border-color 0.3s;
-      font-size: 1.1rem;
-    }
-
-    nav a:hover {
-      border-color: var(--bleu);
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     h2 {
       color: var(--bleu);
       font-size: 1.9rem;
       margin-bottom: 1rem;
-      font-weight: normal;
     }
 
-    /* === Cartes Projets === */
     .carte-projet {
       background: #1e1e1e;
       border: 1px solid var(--bleu);
@@ -99,7 +159,6 @@
       margin-bottom: 1.5rem;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-
     .carte-projet:hover {
       transform: scale(1.02);
       box-shadow: 0 0 15px var(--bleu);
@@ -107,7 +166,6 @@
 
     a { color: var(--bleu); }
 
-    /* === Section Contact === */
     .contact-wrapper {
       display: flex;
       flex-direction: row;
@@ -115,20 +173,16 @@
       gap: 1.5rem;
     }
 
-    .photo-profil {
-      width: 160px;
-      height: 160px;
-      object-fit: cover;
-      border-radius: 10px;
-      border: 2px solid var(--bleu);
-      flex-shrink: 0;
-    }
-
     @media (max-width: 700px) {
-      .contact-wrapper { flex-direction: column-reverse; align-items: center; }
-      .photo-profil { width: 130px; height: 130px; }
-      header h1 { font-size: 2.2rem; }
-      nav a { display: inline-block; margin: 0.5rem 0; }
+      .contact-wrapper,
+      .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .photo-profil {
+        width: 130px;
+        height: 130px;
+      }
     }
 
     footer {
@@ -141,69 +195,98 @@
     }
   </style>
 </head>
-<body>
-  <!-- Canvas pour l'animation de lignes électroniques -->
+<body class="dark-mode">
+  <!-- Canvas fond animé -->
   <canvas id="bgCanvas"></canvas>
 
-  <!-- === Header === -->
-  <header>
-    <!-- Photo profil -->
-      <img src="face-swap.png" alt="Photo professionnelle d’ANDEMI M. Rayhane" class="photos-profil" />
-    <h1>ANDEMI&nbsp;M.&nbsp;Rayhane</h1>
-    <p>Expert en Intelligence Artificielle &amp; Nouvelles Technologies</p>
-    <nav>
+  <!-- Navbar fixe -->
+  <nav id="navbar">
+    <div class="nav-container">
       <a href="#intro">Accueil</a>
       <a href="#projets">Projets</a>
       <a href="#contact">Contact</a>
-    </nav>
+      <a href="CV_Rayhane_ANDEMI.pdf" download class="btn-cv">📄 Télécharger mon CV</a>
+      <button id="themeToggle">🌙</button>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <header id="intro">
+    <div class="header-content">
+      <img src="face-swap.png" alt="Photo professionnelle d’ANDEMI M. Rayhane" class="photo-profil" />
+      <div class="header-text">
+        <h1>ANDEMI&nbsp;M.&nbsp;Rayhane</h1>
+        <p>Expert en Intelligence Artificielle &amp; Nouvelles Technologies</p>
+      </div>
+    </div>
   </header>
 
-  <!-- === Section À propos === -->
-  <section id="intro">
+  <!-- À propos -->
+  <section class="fade-section">
     <h2>À propos</h2>
     <p>
       Je mets la puissance de l’intelligence artificielle au service des entreprises pour booster leurs ventes, optimiser leurs opérations et anticiper l’avenir. Passionné par les nouvelles technologies, je développe des solutions performantes et sur&nbsp;mesure.
     </p>
   </section>
 
-  <!-- === Section Projets === -->
-  <section id="projets">
+  <!-- Projets -->
+  <section id="projets" class="fade-section">
     <h2>Projets IA &amp; Tech</h2>
 
-    <div class="carte-projet">
+    <div class="carte-projet fade-section">
       <h3>Chatbot IA pour l’e‑commerce</h3>
       <p>Développement d’un chatbot intelligent avec traitement du langage naturel pour améliorer le taux de conversion sur un site de vente en&nbsp;ligne.</p>
     </div>
 
-    <div class="carte-projet">
+    <div class="carte-projet fade-section">
       <h3>Tableau de bord prédictif</h3>
       <p>Visualisation de données en temps réel et prévisions de ventes basées sur les historiques clients et modèles de machine learning.</p>
     </div>
   </section>
 
-  <!-- === Section Contact === -->
-  <section id="contact">
+  <!-- Contact -->
+  <section id="contact" class="fade-section">
     <h2>Contact</h2>
     <div class="contact-wrapper">
-      <!-- Infos -->
       <div>
         <p>📧 Email : <a href="mailto:rayhaneandemi@gmail.com">rayhaneandemi@gmail.com</a></p>
-        <p>🔗 GitHub : <a href="https://github.com/ANDEMIrayhane" target="_blank">ANDEMIrayhane</a></p>
+        <p>🔗 GitHub : <a href="https://github.com/ANDEMIrayhane"  target="_blank">ANDEMIrayhane</a></p>
         <p>🌍 Je travaille à l’international</p>
       </div>
-
-      <!-- Photo profil -->
-      <img src="face-swap.png" alt="Photo professionnelle d’ANDEMI M. Rayhane" class="photo-profil" />
+      <img src="face-swap.png" alt="Photo professionnelle d’ANDEMI M. Rayhane" class="photo-profil" />
     </div>
   </section>
 
-  <!-- === Footer === -->
+  <!-- Footer -->
   <footer>
     <p>&copy; 2025 ANDEMI&nbsp;M.&nbsp;Rayhane. Tous droits réservés.</p>
   </footer>
 
-  <!-- === Script d’animation du fond === -->
+  <!-- Script JS intégré -->
   <script>
+    // Toggle theme
+    const toggleBtn = document.getElementById("themeToggle");
+    toggleBtn.addEventListener("click", () => {
+      document.body.classList.toggle("light-mode");
+      toggleBtn.textContent = document.body.classList.contains("light-mode") ? "☀️" : "🌙";
+    });
+
+    // Scroll animations
+    const sections = document.querySelectorAll(".fade-section");
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+        }
+      });
+    }, { threshold: 0.2 });
+
+    sections.forEach(section => {
+      observer.observe(section);
+    });
+
+    // Fond animé - Lignes électroniques
     const canvas = document.getElementById('bgCanvas');
     const ctx = canvas.getContext('2d');
     let width, height;
@@ -227,7 +310,7 @@
         this.offset = Math.random() * 1000;
       }
       draw(time) {
-        const pulse = (Math.sin(time * this.speed + this.offset) + 1) / 2; // 0 → 1
+        const pulse = (Math.sin(time * this.speed + this.offset) + 1) / 2;
         const alpha = 0.12 + 0.38 * pulse;
         ctx.strokeStyle = `rgba(0, 191, 255, ${alpha.toFixed(2)})`;
         ctx.lineWidth = 1;
@@ -245,7 +328,6 @@
       }
     }
 
-    // Génère des lignes espacées
     const lines = [];
     const spacing = 70;
     function generateLines() {
@@ -258,7 +340,6 @@
       }
     }
     generateLines();
-
     window.addEventListener('resize', generateLines);
 
     function animate(time = 0) {
